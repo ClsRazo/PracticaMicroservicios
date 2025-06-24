@@ -1,27 +1,34 @@
 #!/bin/bash
 
-# Script para iniciar todos los microservicios en Amazon Linux
-echo "Iniciando microservicios..."
+# Script para iniciar servicios con RabbitMQ en Docker
+echo "Iniciando servicios con Docker..."
 
 # Crear directorio para logs si no existe
 mkdir -p logs
 
-# Verificar que RabbitMQ esté ejecutándose
+# Iniciar RabbitMQ en Docker
+echo "Iniciando RabbitMQ en Docker..."
+docker run -d --name rabbitmq \
+  -p 5672:5672 \
+  -p 15672:15672 \
+  rabbitmq:3-management
+
+# Esperar a que RabbitMQ esté listo
+echo "Esperando a que RabbitMQ esté listo..."
+sleep 15
+
+# Verificar que RabbitMQ esté funcionando
 echo "Verificando RabbitMQ..."
-sudo systemctl start rabbitmq-server
-sudo systemctl enable rabbitmq-server
+docker ps | grep rabbitmq
 
-# Esperar un poco para que RabbitMQ se inicie completamente
-sleep 5
-
-# Usar la ruta completa de Python y añadir el PATH local del usuario
+# Configurar variables de entorno
 export PATH=$PATH:/home/ec2-user/.local/bin
 PYTHON_CMD="python3"
 
-# Verificar que las dependencias estén instaladas
-echo "Verificando dependencias..."
+# Verificar dependencias
+echo "Verificando dependencias de Python..."
 $PYTHON_CMD -c "import flask, pika, requests" 2>/dev/null || {
-    echo "Instalando dependencias faltantes..."
+    echo "Instalando dependencias..."
     pip3 install --user -r requirements.txt
 }
 
@@ -30,7 +37,6 @@ echo "Iniciando microservicio de usuarios..."
 nohup $PYTHON_CMD usuarios.py > logs/usuarios.log 2>&1 &
 echo $! > logs/usuarios.pid
 
-# Esperar un poco
 sleep 3
 
 # Iniciar microservicio de pagos
@@ -38,7 +44,6 @@ echo "Iniciando microservicio de pagos..."
 nohup $PYTHON_CMD pagos.py > logs/pagos.log 2>&1 &
 echo $! > logs/pagos.pid
 
-# Esperar un poco
 sleep 3
 
 # Iniciar API Gateway
@@ -46,11 +51,12 @@ echo "Iniciando API Gateway..."
 nohup $PYTHON_CMD apiGateway.py > logs/gateway.log 2>&1 &
 echo $! > logs/gateway.pid
 
-# Esperar un poco y verificar que los procesos estén ejecutándose
 sleep 3
 
+# Verificar servicios
+echo ""
 echo "Verificando servicios..."
-echo "=================================="
+echo "========================"
 
 for service in usuarios pagos gateway; do
     if [ -f "logs/${service}.pid" ]; then
@@ -64,11 +70,15 @@ for service in usuarios pagos gateway; do
 done
 
 echo ""
+echo "Estado de RabbitMQ:"
+docker ps | grep rabbitmq && echo "✓ RabbitMQ funcionando" || echo "✗ RabbitMQ no está funcionando"
+
+echo ""
 echo "URLs de acceso:"
+echo "Gateway (Principal): http://18.224.56.4:5002"
 echo "Usuarios: http://18.224.56.4:5000"
 echo "Pagos: http://18.224.56.4:5001"
-echo "Gateway: http://18.224.56.4:5002"
+echo "RabbitMQ Management: http://18.224.56.4:15672 (guest/guest)"
 echo ""
-echo "Logs disponibles en el directorio 'logs/'"
-echo "Para detener los servicios, ejecuta: ./stop_services.sh"
-echo "Para verificar estado, ejecuta: ./check_status.sh"
+echo "Prueba rápida:"
+echo "curl http://18.224.56.4:5002/usuarios/1"
