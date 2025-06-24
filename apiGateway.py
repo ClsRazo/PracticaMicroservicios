@@ -3,8 +3,8 @@ import requests
 
 gateway_app = Flask(__name__)
 
-SERVICIOUSUARIOS = "http://127.0.0.1:5000"
-SERVICIOPAGOS = "http://127.0.0.1:5001"
+SERVICIOUSUARIOS = "http://localhost:5000"
+SERVICIOPAGOS = "http://localhost:5001"
 
 @gateway_app.route("/usuarios/<int:user_id>", methods=["GET"])
 def obtenerUsuario(user_id):
@@ -22,4 +22,4 @@ def procesarPagos():
     return jsonify(response.json())
 
 if __name__ == "__main__":
-    gateway_app.run(port=5002)
+    gateway_app.run(host='0.0.0.0', port=5002, debug=False)
