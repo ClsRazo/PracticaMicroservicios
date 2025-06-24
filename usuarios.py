@@ -12,10 +12,11 @@ usuarios = {
 def enviarMensaje(user_id):
     connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
     channel = connection.channel()
-    channel.queue_declare(queue='pagos')
+    channel.queue_declare(queue='pagos', durable=True)
     
     mensaje = json.dumps({"user_id": user_id})
-    channel.basic_publish(exchange='', routing_key='pagos', body=mensaje)
+    channel.basic_publish(exchange='', routing_key='pagos', body=mensaje, 
+                         properties=pika.BasicProperties(delivery_mode=2))  # Hacer el mensaje persistente
     print(f"Mensaje enviado a la cola de pagos: {mensaje}")
     
     connection.close()
