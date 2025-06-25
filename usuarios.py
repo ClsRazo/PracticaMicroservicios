@@ -37,4 +37,4 @@ def pagarUsuario(user_id):
     return jsonify({"mensaje": "Solicitud de pago enviada", "usuario": usuarios[user_id]})
 
 if __name__ == "__main__":
-    usuarios_app.run(host='0.0.0.0', port=5000, debug=False)
+    usuarios_app.run(host='0.0.0.0', port=5004, debug=False)

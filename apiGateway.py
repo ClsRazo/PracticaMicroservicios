@@ -3,7 +3,7 @@ import requests
 
 gateway_app = Flask(__name__)
 
-SERVICIOUSUARIOS = "http://localhost:5000"
+SERVICIOUSUARIOS = "http://localhost:5004"
 SERVICIOPAGOS = "http://localhost:5001"
 
 @gateway_app.route("/usuarios/<int:user_id>", methods=["GET"])

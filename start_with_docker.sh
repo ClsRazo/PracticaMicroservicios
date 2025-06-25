@@ -76,7 +76,7 @@ docker ps | grep rabbitmq && echo "✓ RabbitMQ funcionando" || echo "✗ Rabbit
 echo ""
 echo "URLs de acceso:"
 echo "Gateway (Principal): http://18.224.56.4:5002"
-echo "Usuarios: http://18.224.56.4:5000"
+echo "Usuarios: http://18.224.56.4:5004"
 echo "Pagos: http://18.224.56.4:5001"
 echo "RabbitMQ Management: http://18.224.56.4:15672 (guest/guest)"
 echo ""

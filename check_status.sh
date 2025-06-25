@@ -28,7 +28,7 @@ check_service() {
 }
 
 # Verificar cada servicio
-check_service "usuarios" "5000"
+check_service "usuarios" "5004"
 check_service "pagos" "5001"
 check_service "gateway" "5002"
 
@@ -43,6 +43,6 @@ echo ""
 
 # Mostrar puertos en uso
 echo "Puertos en uso:"
-netstat -tlnp 2>/dev/null | grep -E ':(5000|5001|5002|5672)' | while read line; do
+netstat -tlnp 2>/dev/null | grep -E ':(5004|5001|5002|5672)' | while read line; do
     echo "  $line"
 done

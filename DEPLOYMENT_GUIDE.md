@@ -48,7 +48,7 @@ curl -X POST http://18.224.56.4:5002/usuarios/1/pagar
 
 ```
 Tipo: Custom TCP
-Puerto: 5000
+Puerto: 5004
 Origen: 0.0.0.0/0
 Descripción: Microservicio Usuarios
 
@@ -79,7 +79,7 @@ Descripción: RabbitMQ Management (opcional)
 - **Procesar pago Ana**: `curl -X POST http://18.224.56.4:5002/usuarios/2/pagar`
 
 ### Microservicios individuales:
-- **Estado usuarios**: http://18.224.56.4:5000/usuarios/1
+- **Estado usuarios**: http://18.224.56.4:5004/usuarios/1
 - **Estado pagos**: http://18.224.56.4:5001/pagos/status
 
 ### Panel de RabbitMQ (opcional):
@@ -161,7 +161,7 @@ echo $! > logs/usuarios.pid
 
 ### Verificar puertos en uso:
 ```bash
-netstat -tlnp | grep -E ':(5000|5001|5002)'
+netstat -tlnp | grep -E ':(5004|5001|5002)'
 ```
 
 ---

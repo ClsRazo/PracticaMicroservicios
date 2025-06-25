@@ -4,7 +4,7 @@ Este proyecto implementa una arquitectura de microservicios con Flask y RabbitMQ
 
 ## Arquitectura
 
-- **Microservicio de Usuarios** (Puerto 5000): Gestiona usuarios y sus saldos
+- **Microservicio de Usuarios** (Puerto 5004): Gestiona usuarios y sus saldos
 - **Microservicio de Pagos** (Puerto 5001): Procesa pagos mediante colas de mensajes
 - **API Gateway** (Puerto 5002): Punto de entrada único para todos los servicios
 - **RabbitMQ**: Sistema de mensajería para comunicación asíncrona
@@ -54,10 +54,10 @@ GET http://18.224.56.4:5001/pagos/status
 
 ### Acceso Directo a Microservicios
 
-#### Microservicio de Usuarios (Puerto 5000)
+#### Microservicio de Usuarios (Puerto 5004)
 ```
-GET http://18.224.56.4:5000/usuarios/1
-POST http://18.224.56.4:5000/usuarios/1/pagar
+GET http://18.224.56.4:5004/usuarios/1
+POST http://18.224.56.4:5004/usuarios/1/pagar
 ```
 
 #### Microservicio de Pagos (Puerto 5001)
